@@ -10,17 +10,19 @@ connectDB();
 
 const app = express();
 
-// Middleware
+// CORS Middleware
 app.use(
   cors({
-    origin: "*", // Allow all origins
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    origin: "*", // Tüm kaynaklara izin ver
+    methods: ["GET", "POST", "PUT", "DELETE"], // İzin verilen HTTP metodları
+    allowedHeaders: ["Content-Type", "Authorization"], // İzin verilen başlıklar
   })
 );
+
+// JSON Middleware
 app.use(express.json());
 
-// Swagger Configuration
+// Swagger Ayarları
 const swaggerOptions = {
   swaggerDefinition: {
     openapi: "3.0.0",
@@ -31,10 +33,10 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: "http://localhost:5000/api/v1", // Local URL
+        url: "http://localhost:5000/api/v1", // Lokal geliştirme için URL
       },
       {
-        url: "https://airbnb-api-77ly.onrender.com/api/v1", // Render URL
+        url: "https://airbnb-api-77ly.onrender.com/api/v1", // Render dağıtım URL'si
       },
     ],
     components: {
@@ -52,21 +54,21 @@ const swaggerOptions = {
       },
     ],
   },
-  apis: ["./routes/*.js"], // Use route files for Swagger documentation
+  apis: ["./routes/*.js"], // Swagger açıklamaları için rota dosyalarını kullan
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
-// Serve Swagger UI at `/api/v1/docs`
+// Swagger UI Servisi `/api/v1/docs` üzerinden sağlanıyor
 app.use("/api/v1/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-// Route Connections
+// Rota Bağlantıları
 app.use("/api/v1/auth", require("./routes/authRoutes"));
 app.use("/api/v1/hosts", require("./routes/hostRoutes"));
 app.use("/api/v1/guests", require("./routes/guestRoutes"));
 app.use("/api/v1/admin", require("./routes/adminRoutes"));
 
-// Health Check Route
+// Sağlık Kontrolü Rotası
 app.get("/api/v1/health", (req, res) => {
   res.status(200).json({ message: "API is running successfully!" });
 });
@@ -76,6 +78,6 @@ app.use((req, res) => {
   res.status(404).json({ message: "Route not found" });
 });
 
-// Start Server
+// Sunucuyu Başlat
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
