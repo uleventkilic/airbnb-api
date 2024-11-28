@@ -10,11 +10,13 @@ exports.listListingsWithRatings = async (req, res) => {
       ...(city && { city }),
     };
 
+    // Filter all listings
     const total = await Listing.countDocuments(filters);
     const listings = await Listing.find(filters)
       .skip((page - 1) * limit)
       .limit(parseInt(limit));
 
+    // Calculate rating information for each listing
     const listingsWithRatings = await Promise.all(
       listings.map(async (listing) => {
         const reviews = await Review.find({ stayId: listing._id });
