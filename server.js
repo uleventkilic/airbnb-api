@@ -33,10 +33,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: "http://localhost:5000/api/v1", // Lokal geliştirme için URL
-      },
-      {
-        url: "https://airbnb-api-77ly.onrender.com/api/v1", // Render dağıtım URL'si
+        url: "https://airbnb-api-77ly.onrender.com/api/v1", // Render URL
       },
     ],
     components: {
@@ -54,7 +51,7 @@ const swaggerOptions = {
       },
     ],
   },
-  apis: ["./routes/*.js"], // Swagger açıklamaları için rota dosyalarını kullan
+  apis: ["./routes/*.js"],
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
