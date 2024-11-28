@@ -5,7 +5,7 @@ exports.verifyToken = (req, res, next) => {
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return res.status(401).json({ message: "Token sağlanmamış" });
+      return res.status(401).json({ message: "Unauthorized" });
     }
 
     const token = authHeader.split(" ")[1];
@@ -15,27 +15,27 @@ exports.verifyToken = (req, res, next) => {
 
     next();
   } catch (err) {
-    res.status(401).json({ message: "Token doğrulama başarısız" });
+    res.status(401).json({ message: "Token verification failed" });
   }
 };
 
 exports.isHost = (req, res, next) => {
   if (req.user.role !== "host") {
-    return res.status(403).json({ message: "Host yetkisi gerekli" });
+    return res.status(403).json({ message: "Host privileges required" });
   }
   next();
 };
 
 exports.isAdmin = (req, res, next) => {
   if (req.user.role !== "admin") {
-    return res.status(403).json({ message: "Admin yetkisi gerekli" });
+    return res.status(403).json({ message: "Admin privileges required" });
   }
   next();
 };
 
 exports.isGuest = (req, res, next) => {
   if (req.user.role !== "guest") {
-    return res.status(403).json({ message: "Guest yetkisi gerekli" });
+    return res.status(403).json({ message: "Guest privileges required" });
   }
   next();
 };
