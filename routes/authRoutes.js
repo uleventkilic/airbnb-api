@@ -1,31 +1,6 @@
 const express = require("express");
-const { registerUser, loginUser } = require("../controllers/authController");
 const router = express.Router();
-
-/**
- * @swagger
- * /auth/register:
- *   post:
- *     summary: Yeni kullanıcı kaydı
- *     tags: [Auth]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               username:
- *                 type: string
- *               email:
- *                 type: string
- *               password:
- *                 type: string
- *     responses:
- *       201:
- *         description: Kullanıcı başarıyla kaydedildi
- */
-router.post("/register", registerUser);
+const { login } = require("../controllers/authController");
 
 /**
  * @swagger
@@ -42,12 +17,16 @@ router.post("/register", registerUser);
  *             properties:
  *               email:
  *                 type: string
+ *                 description: Kullanıcı email adresi
  *               password:
  *                 type: string
+ *                 description: Kullanıcı şifresi
  *     responses:
  *       200:
- *         description: Giriş başarılı
+ *         description: Başarılı giriş
+ *       401:
+ *         description: Geçersiz email veya şifre
  */
-router.post("/login", loginUser);
+router.post("/login", login);
 
 module.exports = router;
