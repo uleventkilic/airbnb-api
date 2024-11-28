@@ -7,7 +7,7 @@ const { addListing } = require("../controllers/hostController");
  * @swagger
  * /hosts/listings:
  *   post:
- *     summary: Yeni ilan ekleme (Sadece Host)
+ *     summary: Add a new listing (Host only)
  *     tags: [Host]
  *     security:
  *       - bearerAuth: []
@@ -37,7 +37,7 @@ const { addListing } = require("../controllers/hostController");
  *                 example: 200
  *     responses:
  *       201:
- *         description: İlan başarıyla eklendi
+ *         description: Listing successfully added
  *         content:
  *           application/json:
  *             schema:
@@ -47,9 +47,9 @@ const { addListing } = require("../controllers/hostController");
  *                   type: string
  *                   example: "Listing successfully added"
  *       401:
- *         description: Token doğrulama başarısız
+ *         description: Token verification failed
  *       403:
- *         description: Host yetkisi gerekli
+ *         description: Host privileges required
  */
 router.post("/listings", verifyToken, isHost, addListing);
 
