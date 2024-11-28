@@ -7,8 +7,8 @@ const { listListingsWithPaging } = require("../controllers/adminController");
  * @swagger
  * /admin/listings:
  *   get:
- *     summary: İlanları listeleme ve filtreleme
- *     description: İlanları ülke ve şehir bilgisine göre filtreleyerek listeler.
+ *     summary: List and filter listings
+ *     description: Lists listings filtered by country and city information.
  *     tags: [Admin]
  *     security:
  *       - bearerAuth: []
@@ -18,28 +18,28 @@ const { listListingsWithPaging } = require("../controllers/adminController");
  *         schema:
  *           type: string
  *         example: "Turkey"
- *         description: Filtreleme için ülke
+ *         description: Filter by country
  *       - in: query
  *         name: city
  *         schema:
  *           type: string
  *         example: "Istanbul"
- *         description: Filtreleme için şehir
+ *         description: Filter by city
  *       - in: query
  *         name: page
  *         schema:
  *           type: integer
  *         example: 1
- *         description: Sayfa numarası
+ *         description: Page number
  *       - in: query
  *         name: limit
  *         schema:
  *           type: integer
  *         example: 10
- *         description: Her sayfada gösterilecek ilan sayısı
+ *         description: Number of listings per page
  *     responses:
  *       200:
- *         description: Başarılı
+ *         description: Successful
  *         content:
  *           application/json:
  *             schema:
@@ -54,9 +54,9 @@ const { listListingsWithPaging } = require("../controllers/adminController");
  *                 totalPages:
  *                   type: integer
  *       401:
- *         description: Yetkisiz erişim
+ *         description: Unauthorized access
  *       500:
- *         description: Sunucu hatası
+ *         description: Server error
  */
 router.get("/listings", verifyToken, isAdmin, listListingsWithPaging);
 
