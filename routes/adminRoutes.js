@@ -1,14 +1,15 @@
 const express = require("express");
-const router = express.Router();
 const { verifyToken, isAdmin } = require("../middleware/authMiddleware");
-const { listListingsWithPaging } = require("../controllers/adminController");
+const { listListingsWithPagingAndRatings } = require("../controllers/adminController");
+
+const router = express.Router();
 
 /**
  * @swagger
- * /admin/listings:
+ * /admin/report-listings:
  *   get:
- *     summary: List and filter listings
- *     description: Lists listings filtered by country and city information.
+ *     summary: List and filter listings with paging and rating
+ *     description: Lists listings filtered by country, city, and minimum rating with paging.
  *     tags: [Admin]
  *     security:
  *       - bearerAuth: []
@@ -17,47 +18,56 @@ const { listListingsWithPaging } = require("../controllers/adminController");
  *         name: country
  *         schema:
  *           type: string
- *         example: "Turkey"
  *         description: Filter by country
  *       - in: query
  *         name: city
  *         schema:
  *           type: string
- *         example: "Istanbul"
  *         description: Filter by city
+ *       - in: query
+ *         name: minRating
+ *         schema:
+ *           type: number
+ *           default: 0
+ *         description: Minimum rating to filter
  *       - in: query
  *         name: page
  *         schema:
  *           type: integer
- *         example: 1
+ *           default: 1
  *         description: Page number
  *       - in: query
  *         name: limit
  *         schema:
  *           type: integer
- *         example: 10
+ *           default: 10
  *         description: Number of listings per page
  *     responses:
  *       200:
- *         description: Successful
+ *         description: Success
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 data:
- *                   type: array
- *                   items:
- *                     type: object
+ *                 status:
+ *                   type: string
+ *                   example: success
  *                 currentPage:
  *                   type: integer
  *                 totalPages:
  *                   type: integer
+ *                 totalResults:
+ *                   type: integer
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
  *       401:
- *         description: Unauthorized access
+ *         description: Unauthorized
  *       500:
  *         description: Server error
  */
-router.get("/listings", verifyToken, isAdmin, listListingsWithPaging);
+router.get("/report-listings", verifyToken, isAdmin, listListingsWithPagingAndRatings);
 
 module.exports = router;
