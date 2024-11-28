@@ -6,7 +6,7 @@ const { login } = require("../controllers/authController");
  * @swagger
  * /auth/login:
  *   post:
- *     summary: Kullanıcı girişi
+ *     summary: User login
  *     tags: [Auth]
  *     requestBody:
  *       required: true
@@ -17,15 +17,15 @@ const { login } = require("../controllers/authController");
  *             properties:
  *               email:
  *                 type: string
- *                 description: Kullanıcı email adresi
+ *                 description: User email address
  *               password:
  *                 type: string
- *                 description: Kullanıcı şifresi
+ *                 description: User password
  *     responses:
  *       200:
- *         description: Başarılı giriş
+ *         description: Successful login
  *       401:
- *         description: Geçersiz email veya şifre
+ *         description: Invalid email or password
  */
 router.post("/login", login);
 
