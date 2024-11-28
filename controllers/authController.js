@@ -5,13 +5,13 @@ exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Kullanıcıyı bul
+    // Find the user
     const user = await User.findOne({ email });
     if (!user || user.password !== password) {
-      return res.status(401).json({ message: "Geçersiz email veya şifre" });
+      return res.status(401).json({ message: "Invalid email or password" });
     }
 
-    // JWT Token oluştur
+    // Create a JWT token
     const token = jwt.sign(
       { id: user._id, role: user.role },
       process.env.JWT_SECRET,
@@ -19,7 +19,7 @@ exports.login = async (req, res) => {
     );
 
     res.status(200).json({
-      message: "Giriş başarılı",
+      message: "Login successful",
       token,
     });
   } catch (err) {
