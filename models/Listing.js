@@ -22,6 +22,14 @@ const ListingSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+  averageRating: {
+    type: Number,
+    default: 0, // Average rating for the listing
+  },
+  totalReviews: {
+    type: Number,
+    default: 0, // Total number of reviews for the listing
+  },
 });
 
 module.exports = mongoose.model("Listing", ListingSchema);
