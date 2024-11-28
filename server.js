@@ -66,6 +66,11 @@ app.use("/api/v1/hosts", require("./routes/hostRoutes"));
 app.use("/api/v1/guests", require("./routes/guestRoutes"));
 app.use("/api/v1/admin", require("./routes/adminRoutes"));
 
+// Health Check Route
+app.get("/api/v1/health", (req, res) => {
+  res.status(200).json({ message: "API is running successfully!" });
+});
+
 // 404 Middleware
 app.use((req, res) => {
   res.status(404).json({ message: "Route not found" });
