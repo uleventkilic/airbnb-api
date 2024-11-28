@@ -5,7 +5,7 @@ exports.addListing = async (req, res) => {
     const { noOfPeople, country, city, price } = req.body;
 
     if (!noOfPeople || !country || !city || !price) {
-      return res.status(400).json({ message: "Tüm alanlar doldurulmalıdır" });
+      return res.status(400).json({ message: "All fields are required" });
     }
 
     const newListing = new Listing({
@@ -13,7 +13,7 @@ exports.addListing = async (req, res) => {
       country,
       city,
       price,
-      host: req.user.id, // Token'dan gelen kullanıcı ID'si
+      host: req.user.id, // User ID from the token
     });
 
     await newListing.save();
