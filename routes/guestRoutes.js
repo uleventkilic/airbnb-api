@@ -7,8 +7,8 @@ const { listListings, bookStay, addReview } = require("../controllers/guestContr
  * @swagger
  * /guests/listings:
  *   get:
- *     summary: İlanları listeleme
- *     description: Tarih ve kişi bilgilerine göre ilanları listeler.
+ *     summary: List properties
+ *     description: Lists properties based on date, location, and number of people.
  *     tags: [Guest]
  *     parameters:
  *       - in: query
@@ -17,37 +17,47 @@ const { listListings, bookStay, addReview } = require("../controllers/guestContr
  *           type: string
  *           format: date
  *         example: "2024-01-01"
- *         description: Başlangıç tarihi
+ *         description: Start date
  *       - in: query
  *         name: dateTo
  *         schema:
  *           type: string
  *           format: date
  *         example: "2024-01-07"
- *         description: Bitiş tarihi
+ *         description: End date
  *       - in: query
- *         name: namesOfPeople
+ *         name: noOfPeople
  *         schema:
- *           type: array
- *           items:
- *             type: string
- *         example: ["John Doe", "Jane Smith"]
- *         description: Kişi isimleri
+ *           type: integer
+ *         example: 3
+ *         description: Number of people
+ *       - in: query
+ *         name: country
+ *         schema:
+ *           type: string
+ *         example: "Turkey"
+ *         description: Country
+ *       - in: query
+ *         name: city
+ *         schema:
+ *           type: string
+ *         example: "Istanbul"
+ *         description: City
  *       - in: query
  *         name: page
  *         schema:
  *           type: integer
  *         example: 1
- *         description: Sayfa numarası
+ *         description: Page number
  *       - in: query
  *         name: limit
  *         schema:
  *           type: integer
  *         example: 10
- *         description: Her sayfada gösterilecek ilan sayısı
+ *         description: Number of listings per page
  *     responses:
  *       200:
- *         description: Başarılı
+ *         description: Successful
  *         content:
  *           application/json:
  *             schema:
@@ -62,7 +72,7 @@ const { listListings, bookStay, addReview } = require("../controllers/guestContr
  *                 totalPages:
  *                   type: integer
  *       500:
- *         description: Sunucu hatası
+ *         description: Server error
  */
 router.get("/listings", listListings);
 
@@ -70,8 +80,8 @@ router.get("/listings", listListings);
  * @swagger
  * /guests/bookings:
  *   post:
- *     summary: Rezervasyon yapma
- *     description: Giriş yapan misafirler için rezervasyon yapar.
+ *     summary: Make a booking
+ *     description: Allows logged-in guests to make a booking.
  *     tags: [Guest]
  *     security:
  *       - bearerAuth: []
@@ -101,11 +111,11 @@ router.get("/listings", listListings);
  *                 example: ["John Doe", "Jane Smith"]
  *     responses:
  *       201:
- *         description: Rezervasyon başarıyla yapıldı
+ *         description: Booking successfully created
  *       401:
- *         description: Token doğrulama başarısız
+ *         description: Token verification failed
  *       500:
- *         description: Sunucu hatası
+ *         description: Server error
  */
 router.post("/bookings", verifyToken, isGuest, bookStay);
 
@@ -113,8 +123,8 @@ router.post("/bookings", verifyToken, isGuest, bookStay);
  * @swagger
  * /guests/reviews:
  *   post:
- *     summary: Yorum ekleme
- *     description: Sadece rezervasyon yapmış kullanıcılar yorum yapabilir.
+ *     summary: Add a review
+ *     description: Only users who have made a booking can add a review.
  *     tags: [Guest]
  *     security:
  *       - bearerAuth: []
@@ -140,13 +150,13 @@ router.post("/bookings", verifyToken, isGuest, bookStay);
  *                 example: "It was an amazing stay!"
  *     responses:
  *       201:
- *         description: Yorum başarıyla eklendi
+ *         description: Review successfully added
  *       400:
- *         description: Eksik veya hatalı parametreler
+ *         description: Missing or invalid parameters
  *       403:
- *         description: Yalnızca rezervasyon yapan kullanıcılar yorum yapabilir
+ *         description: Only users who made a booking can leave a review
  *       500:
- *         description: Sunucu hatası
+ *         description: Server error
  */
 router.post("/reviews", verifyToken, isGuest, addReview);
 
