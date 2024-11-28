@@ -13,16 +13,16 @@ const app = express();
 // CORS Middleware
 app.use(
   cors({
-    origin: "*", // Tüm kaynaklara izin ver
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // OPTIONS isteğini de ekle
-    allowedHeaders: ["Content-Type", "Authorization"], // Gerekli başlıklar
+    origin: "*", // Allow all origins
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Include OPTIONS request
+    allowedHeaders: ["Content-Type", "Authorization"], // Required headers
   })
 );
 
 // JSON Middleware
 app.use(express.json());
 
-// Swagger Ayarları
+// Swagger Configuration
 const swaggerOptions = {
   swaggerDefinition: {
     openapi: "3.0.0",
@@ -56,16 +56,16 @@ const swaggerOptions = {
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
-// Swagger UI Servisi `/api/v1/docs` üzerinden sağlanıyor
+// Serve Swagger UI at `/api/v1/docs`
 app.use("/api/v1/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-// Rota Bağlantıları
+// Route Connections
 app.use("/api/v1/auth", require("./routes/authRoutes"));
 app.use("/api/v1/hosts", require("./routes/hostRoutes"));
 app.use("/api/v1/guests", require("./routes/guestRoutes"));
 app.use("/api/v1/admin", require("./routes/adminRoutes"));
 
-// Sağlık Kontrolü Rotası
+// Health Check Route
 app.get("/api/v1/health", (req, res) => {
   res.status(200).json({ message: "API is running successfully!" });
 });
@@ -75,6 +75,6 @@ app.use((req, res) => {
   res.status(404).json({ message: "Route not found" });
 });
 
-// Sunucuyu Başlat
+// Start the Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
