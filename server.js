@@ -14,8 +14,8 @@ const app = express();
 app.use(
   cors({
     origin: "*", // Tüm kaynaklara izin ver
-    methods: ["GET", "POST", "PUT", "DELETE"], // İzin verilen HTTP metodları
-    allowedHeaders: ["Content-Type", "Authorization"], // İzin verilen başlıklar
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // OPTIONS isteğini de ekle
+    allowedHeaders: ["Content-Type", "Authorization"], // Gerekli başlıklar
   })
 );
 
