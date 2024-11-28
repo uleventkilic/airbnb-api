@@ -1,15 +1,15 @@
 const express = require("express");
 const { verifyToken, isAdmin } = require("../middleware/authMiddleware");
-const { listListingsWithPaging } = require("../controllers/adminController");
+const { listListingsWithRatings } = require("../controllers/adminController");
 
 const router = express.Router();
 
 /**
  * @swagger
- * /admin/report-listings:
+ * /admin/listings:
  *   get:
- *     summary: List and filter listings with paging
- *     description: Lists listings filtered by country and city with paging.
+ *     summary: List listings with ratings
+ *     description: Lists all listings along with their ratings for admins.
  *     tags: [Admin]
  *     security:
  *       - bearerAuth: []
@@ -57,11 +57,26 @@ const router = express.Router();
  *                   type: array
  *                   items:
  *                     type: object
+ *                     properties:
+ *                       _id:
+ *                         type: string
+ *                       noOfPeople:
+ *                         type: integer
+ *                       country:
+ *                         type: string
+ *                       city:
+ *                         type: string
+ *                       price:
+ *                         type: number
+ *                       averageRating:
+ *                         type: number
+ *                       totalReviews:
+ *                         type: integer
  *       401:
  *         description: Unauthorized
  *       500:
  *         description: Server error
  */
-router.get("/report-listings", verifyToken, isAdmin, listListingsWithPaging);
+router.get("/listings", verifyToken, isAdmin, listListingsWithRatings);
 
 module.exports = router;
