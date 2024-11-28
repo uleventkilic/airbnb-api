@@ -1,6 +1,6 @@
 const express = require("express");
 const { verifyToken, isAdmin } = require("../middleware/authMiddleware");
-const { listListingsWithPagingAndRatings } = require("../controllers/adminController");
+const { listListingsWithPaging } = require("../controllers/adminController");
 
 const router = express.Router();
 
@@ -8,8 +8,8 @@ const router = express.Router();
  * @swagger
  * /admin/report-listings:
  *   get:
- *     summary: List and filter listings with paging and rating
- *     description: Lists listings filtered by country, city, and minimum rating with paging.
+ *     summary: List and filter listings with paging
+ *     description: Lists listings filtered by country and city with paging.
  *     tags: [Admin]
  *     security:
  *       - bearerAuth: []
@@ -24,12 +24,6 @@ const router = express.Router();
  *         schema:
  *           type: string
  *         description: Filter by city
- *       - in: query
- *         name: minRating
- *         schema:
- *           type: number
- *           default: 0
- *         description: Minimum rating to filter
  *       - in: query
  *         name: page
  *         schema:
@@ -68,6 +62,6 @@ const router = express.Router();
  *       500:
  *         description: Server error
  */
-router.get("/report-listings", verifyToken, isAdmin, listListingsWithPagingAndRatings);
+router.get("/report-listings", verifyToken, isAdmin, listListingsWithPaging);
 
 module.exports = router;
