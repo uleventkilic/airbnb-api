@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const ReviewSchema = new mongoose.Schema({
   stayId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Booking",
+    ref: "Listing",
     required: true,
   },
   rating: {
