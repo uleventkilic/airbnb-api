@@ -1,14 +1,15 @@
 const express = require("express");
+const { verifyToken } = require("../middleware/authMiddleware");
+const { queryListings, bookStay, addReview } = require("../controllers/guestController");
+
 const router = express.Router();
-const { verifyToken, isGuest } = require("../middleware/authMiddleware");
-const { listListings, bookStay, addReview } = require("../controllers/guestController");
 
 /**
  * @swagger
  * /guests/listings:
  *   get:
- *     summary: List properties
- *     description: Lists properties based on date, location, and number of people.
+ *     summary: Query listings by availability
+ *     description: Lists only the available listings for the specified date range.
  *     tags: [Guest]
  *     parameters:
  *       - in: query
@@ -17,38 +18,38 @@ const { listListings, bookStay, addReview } = require("../controllers/guestContr
  *           type: string
  *           format: date
  *         example: "2024-01-01"
- *         description: Start date
+ *         description: Start date for the search
  *       - in: query
  *         name: dateTo
  *         schema:
  *           type: string
  *           format: date
- *         example: "2024-01-07"
- *         description: End date
+ *         example: "2024-01-05"
+ *         description: End date for the search
  *       - in: query
  *         name: noOfPeople
  *         schema:
  *           type: integer
- *         example: 3
- *         description: Number of people
+ *         example: 2
+ *         description: Minimum number of people the listing should accommodate
  *       - in: query
  *         name: country
  *         schema:
  *           type: string
  *         example: "Turkey"
- *         description: Country
+ *         description: Filter listings by country
  *       - in: query
  *         name: city
  *         schema:
  *           type: string
  *         example: "Istanbul"
- *         description: City
+ *         description: Filter listings by city
  *       - in: query
  *         name: page
  *         schema:
  *           type: integer
  *         example: 1
- *         description: Page number
+ *         description: Page number for pagination
  *       - in: query
  *         name: limit
  *         schema:
@@ -57,31 +58,38 @@ const { listListings, bookStay, addReview } = require("../controllers/guestContr
  *         description: Number of listings per page
  *     responses:
  *       200:
- *         description: Successful
+ *         description: Success
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 data:
- *                   type: array
- *                   items:
- *                     type: object
+ *                 status:
+ *                   type: string
+ *                   example: success
  *                 currentPage:
  *                   type: integer
  *                 totalPages:
  *                   type: integer
+ *                 totalResults:
+ *                   type: integer
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *       400:
+ *         description: Missing or invalid parameters
  *       500:
  *         description: Server error
  */
-router.get("/listings", listListings);
+router.get("/listings", queryListings);
 
 /**
  * @swagger
  * /guests/bookings:
  *   post:
- *     summary: Make a booking
- *     description: Allows logged-in guests to make a booking.
+ *     summary: Book a stay
+ *     description: Allows guests to book a stay for a specific listing.
  *     tags: [Guest]
  *     security:
  *       - bearerAuth: []
@@ -92,10 +100,15 @@ router.get("/listings", listListings);
  *           schema:
  *             type: object
  *             required:
+ *               - listingId
  *               - dateFrom
  *               - dateTo
  *               - namesOfPeople
  *             properties:
+ *               listingId:
+ *                 type: string
+ *                 description: The ID of the listing to book
+ *                 example: "64f2b8c8f1c84900123abcde"
  *               dateFrom:
  *                 type: string
  *                 format: date
@@ -103,7 +116,7 @@ router.get("/listings", listListings);
  *               dateTo:
  *                 type: string
  *                 format: date
- *                 example: "2024-01-07"
+ *                 example: "2024-01-05"
  *               namesOfPeople:
  *                 type: array
  *                 items:
@@ -112,19 +125,31 @@ router.get("/listings", listListings);
  *     responses:
  *       201:
  *         description: Booking successfully created
- *       401:
- *         description: Token verification failed
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Booking successfully created
+ *                 data:
+ *                   type: object
+ *       400:
+ *         description: Missing or invalid parameters
+ *       404:
+ *         description: Listing not found
  *       500:
  *         description: Server error
  */
-router.post("/bookings", verifyToken, isGuest, bookStay);
+router.post("/bookings", verifyToken, bookStay);
 
 /**
  * @swagger
  * /guests/reviews:
  *   post:
  *     summary: Add a review
- *     description: Only users who have made a booking can add a review.
+ *     description: Allows guests to add a review for a stay they have booked.
  *     tags: [Guest]
  *     security:
  *       - bearerAuth: []
@@ -135,29 +160,44 @@ router.post("/bookings", verifyToken, isGuest, bookStay);
  *           schema:
  *             type: object
  *             required:
- *               - stayId
+ *               - bookingId
  *               - rating
  *               - comment
  *             properties:
- *               stayId:
+ *               bookingId:
  *                 type: string
+ *                 description: The ID of the booking to review
  *                 example: "64f2b8c8f1c84900123abcde"
  *               rating:
  *                 type: number
+ *                 description: The rating for the stay
+ *                 minimum: 1
+ *                 maximum: 5
  *                 example: 5
  *               comment:
  *                 type: string
- *                 example: "It was an amazing stay!"
+ *                 description: The comment for the review
+ *                 example: "The stay was fantastic!"
  *     responses:
  *       201:
  *         description: Review successfully added
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Review successfully added
+ *                 data:
+ *                   type: object
  *       400:
  *         description: Missing or invalid parameters
  *       403:
- *         description: Only users who made a booking can leave a review
+ *         description: Booking not found or does not belong to the user
  *       500:
  *         description: Server error
  */
-router.post("/reviews", verifyToken, isGuest, addReview);
+router.post("/reviews", verifyToken, addReview);
 
 module.exports = router;
