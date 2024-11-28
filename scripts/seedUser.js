@@ -7,7 +7,7 @@ dotenv.config();
 const seedUsers = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
-    console.log("MongoDB bağlantısı başarılı");
+    console.log("MongoDB connection successful");
 
     const users = [
       { email: "admin@example.com", password: "admin123", role: "admin" },
@@ -16,11 +16,11 @@ const seedUsers = async () => {
     ];
 
     await User.insertMany(users);
-    console.log("Kullanıcılar başarıyla eklendi");
+    console.log("Users added successfully");
 
     process.exit();
   } catch (err) {
-    console.error("Hata:", err.message);
+    console.error("Error:", err.message);
     process.exit(1);
   }
 };
