@@ -11,13 +11,7 @@ connectDB();
 const app = express();
 
 // Middleware
-app.use(
-  cors({
-    origin: "*", // Tüm domainlerden erişime izin ver
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+app.use(cors());
 app.use(express.json());
 
 // Swagger Ayarları
@@ -27,11 +21,11 @@ const swaggerOptions = {
     info: {
       title: "Airbnb API",
       version: "1.0.0",
-      description: "API Documentation for Airbnb-like application",
+      description: "Airbnb benzeri uygulama için API dokümantasyonu",
     },
     servers: [
       {
-        url: "https://airbnb-api-77ly.onrender.com/api/v1", // Render'daki URL'niz
+        url: "http://localhost:5000/api/v1",
       },
     ],
     components: {
@@ -49,7 +43,7 @@ const swaggerOptions = {
       },
     ],
   },
-  apis: ["./routes/*.js"], // Swagger açıklamalarının bulunduğu dosyalar
+  apis: ["./routes/*.js"],
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
