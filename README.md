@@ -93,8 +93,6 @@ ER diagram representing the data structure for this project:
 
 ## **Assumptions**
 
-## **Assumptions**
-
 1. **Authentication**
    - Admins have exclusive access to `/admin` endpoints to view and filter listings, as well as manage reviews and user roles.
    - Hosts can manage their property listings via `/hosts` endpoints, including adding, editing, and removing properties.
