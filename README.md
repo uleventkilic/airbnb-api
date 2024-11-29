@@ -79,7 +79,7 @@ The system is designed to be modular and scalable with the following components:
 
 ER diagram representing the data structure for this project:
 
-![Entity-Relationship Diagram](https://imgur.com/a/WexlE6V)
+![Entity-Relationship Diagram](https://raw.githubusercontent.com/uleventkilic/airbnb-api/main/ER.png)
 
 ---
 
