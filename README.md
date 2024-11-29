@@ -11,6 +11,13 @@ This project is a RESTful API providing functionality for an Airbnb-like platfor
 
 ---
 
+## **Presentation Links**
+
+- **Source Code Presentation**: [Youtube Video](https://youtu.be/yNECydKwhkI)
+- **Testing Presentation**: [Youtube Video](https://youtu.be/8ilBsy2N8Vs)
+
+---
+
 ## **Features**
 
 ### **Admin Features**
