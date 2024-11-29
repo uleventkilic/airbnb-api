@@ -142,7 +142,7 @@ router.get("/listings", queryListings);
  *       500:
  *         description: Server error
  */
-router.post("/bookings", verifyToken, bookStay);
+router.post("/bookings", verifyToken, isHost, bookStay);
 
 /**
  * @swagger
@@ -198,6 +198,6 @@ router.post("/bookings", verifyToken, bookStay);
  *       500:
  *         description: Server error
  */
-router.post("/reviews", verifyToken, addReview);
+router.post("/reviews", verifyToken, isHost, addReview);
 
 module.exports = router;
