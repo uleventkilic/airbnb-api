@@ -1,5 +1,5 @@
 const express = require("express");
-const { verifyToken } = require("../middleware/authMiddleware");
+const { verifyToken, isGuest } = require("../middleware/authMiddleware");
 const { queryListings, bookStay, addReview } = require("../controllers/guestController");
 
 const router = express.Router();
